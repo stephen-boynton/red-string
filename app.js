@@ -148,48 +148,48 @@ app.get("/:case/files/tags", async (req, res) => {
 // Posts
 //============
 
-//new case
-app.post("/case/new", (req, res) => {
-  const newCase = createCase(req.body);
-  if (newCase) res.send(true);
-  if (!newCase) res.send(false);
-});
+// //new case
+// app.post("/case/new", (req, res) => {
+//   const newCase = createCase(req.body);
+//   if (newCase) res.send(true);
+//   if (!newCase) res.send(false);
+// });
 
-//new file and new tags
-app.post("/case/:case/new", upload.single("file"), async (req, res) => {
-  console.log("Recieved file in app", req.file);
-  const document = req.file;
-  const thisCase = req.params.case;
-  let docType;
-  let fileLocation;
-  let fileObject = {};
-  let newFile;
-  if (req.body.file_text !== "") {
-    newFile = req.body.file_text;
-    docType = "input";
-    fileObject.file_name = req.body.name;
-    fileObject.file_description = req.body.description;
-    fileObject.case_id = thisCase;
-    fileObject.file_text = req.body.file_text;
-  } else {
-    newFile = document;
-    docType = req.body.file_type;
-    fileObject.file_name = req.body.name;
-    fileObject.file_description = req.body.description;
-    fileObject.case_id = thisCase;
-    fileLocation = __dirname + "/" + document.path;
-  }
-  const fileId = await createFile(fileObject);
-  const tags = await fileHandler(newFile, fileLocation, docType);
-  if (document) {
-    createTags(tags, fileId.id, thisCase).then(deleteFile(fileLocation));
-  } else {
-    createTags(tags, fileId.id, thisCase);
-  }
+// //new file and new tags
+// app.post("/case/:case/new", upload.single("file"), async (req, res) => {
+//   console.log("Recieved file in app", req.file);
+//   const document = req.file;
+//   const thisCase = req.params.case;
+//   let docType;
+//   let fileLocation;
+//   let fileObject = {};
+//   let newFile;
+//   if (req.body.file_text !== "") {
+//     newFile = req.body.file_text;
+//     docType = "input";
+//     fileObject.file_name = req.body.name;
+//     fileObject.file_description = req.body.description;
+//     fileObject.case_id = thisCase;
+//     fileObject.file_text = req.body.file_text;
+//   } else {
+//     newFile = document;
+//     docType = req.body.file_type;
+//     fileObject.file_name = req.body.name;
+//     fileObject.file_description = req.body.description;
+//     fileObject.case_id = thisCase;
+//     fileLocation = __dirname + "/" + document.path;
+//   }
+//   const fileId = await createFile(fileObject);
+//   const tags = await fileHandler(newFile, fileLocation, docType);
+//   if (document) {
+//     createTags(tags, fileId.id, thisCase).then(deleteFile(fileLocation));
+//   } else {
+//     createTags(tags, fileId.id, thisCase);
+//   }
 
-  if (document) res.send(true);
-  if (!document) res.send(false);
-});
+//   if (document) res.send(true);
+//   if (!document) res.send(false);
+// });
 
 // ============================================
 // Server set up
